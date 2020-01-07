@@ -1,0 +1,16 @@
+---
+- name: Install avahi
+  become: yes
+  become_user: root
+  pacman:
+    name: avahi
+    state: present
+
+- name: Enable avahi
+  become: yes
+  become_user: root
+  service:
+    name: avahi-daemon.service
+    enabled: yes 
+    state: started
+  ignore_errors: yes # This task may fail, so skip on error.

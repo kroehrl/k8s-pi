@@ -1,0 +1,7 @@
+---
+- name: Install dbus
+  become: yes
+  become_user: root
+  pacman:
+    name: dbus
+    state: present

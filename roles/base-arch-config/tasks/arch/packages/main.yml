@@ -1,0 +1,24 @@
+---
+- name: Run the equivalent of "pacman -Syu" as a separate step
+  become: yes
+  become_user: root
+  pacman:
+    update_cache: yes
+    upgrade: yes
+
+- include: yay.yml
+- include: bash.yml
+- include: zsh.yml
+- include: acpid.yml
+- include: htop.yml
+- include: dbus.yml
+- include: avahi.yml
+# - include: cups.yml
+- include: cronie.yml
+- include: timesync.yml
+- include: rsync.yml
+- include: ethtool.yml
+- include: socat.yml
+- include: docker.yml
+- include: kubernetes-binaries.yml
+- include: cni-plugins.yml

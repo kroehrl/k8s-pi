@@ -1,0 +1,15 @@
+---
+- name: Install acpid
+  become: yes
+  become_user: root
+  pacman:
+    name: acpid
+    state: present
+
+- name: Enable acpid
+  become: yes
+  become_user: root
+  service:
+    name: acpid.service
+    enabled: yes 
+    state: started

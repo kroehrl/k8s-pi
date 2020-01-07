@@ -1,0 +1,24 @@
+---
+- name: Install docker
+  become: yes
+  become_user: root
+  pacman:
+    name: docker
+    state: present
+
+- name: Enable docker
+  become: yes
+  become_user: root
+  service:
+    name: docker.service
+    enabled: yes 
+    state: started
+  ignore_errors: yes # This task may fail. But after the later reboot the service should be up and running.
+
+- name: Add user to docker group
+  become: yes
+  become_user: root
+  user: 
+    name: "{{ user_name }}"
+    groups: docker
+    append: yes

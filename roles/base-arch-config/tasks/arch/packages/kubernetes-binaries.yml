@@ -1,0 +1,47 @@
+---
+- name: download kubernetes binaries
+  become: yes
+  become_user: root
+  get_url:
+    url: "https://storage.googleapis.com/kubernetes-release/release/{{ k8s_version }}/bin/linux/arm64/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    mode: '0755'
+    force: yes
+  loop:
+    - kubeadm
+    - kubelet
+    - kubectl
+
+- name: Download kubelet.service
+  become: yes
+  become_user: root
+  get_url:
+    url: "https://raw.githubusercontent.com/kubernetes/kubernetes/{{ k8s_version }}/build/debs/kubelet.service"
+    dest: /etc/systemd/system/kubelet.service
+    mode: '0644'
+    force: yes
+
+- name: create /etc/systemd/system/kubelet.service.d directory
+  become: yes
+  become_user: root
+  file:
+    path: /etc/systemd/system/kubelet.service.d
+    state: directory
+
+- name: Download 10-kubeadm.conf
+  become: yes
+  become_user: root
+  get_url:
+    url: "https://raw.githubusercontent.com/kubernetes/kubernetes/{{ k8s_version }}/build/debs/10-kubeadm.conf"
+    dest:  "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
+    mode: '0644'
+    force: yes
+
+- name: Enable kubelet
+  become: yes
+  become_user: root
+  service:
+    name: kubelet.service
+    enabled: yes 
+    state: started
+  ignore_errors: yes # This task may fail. But after the later reboot the service should be up and running.

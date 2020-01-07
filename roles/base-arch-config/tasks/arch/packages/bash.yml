@@ -1,0 +1,9 @@
+---
+- name: Install BASH
+  become: yes
+  become_user: root
+  pacman:
+    name:
+      - bash
+      - bash-completion
+    state: present

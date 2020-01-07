@@ -1,0 +1,30 @@
+---
+- name: install cni-plugins
+  become: yes
+  become_user: root
+  pacman:
+    name: cni-plugins
+    state: present
+
+- name: create directory /opt/cni/bin if it does not exist
+  become: yes
+  become_user: root
+  file:
+    path: /opt/cni/bin
+    state: directory
+
+- name: get files in /usr/lib/cni/
+  find:
+    paths: /usr/lib/cni
+  register: path_files
+
+- name: link all cni-plugins from /usr/lib/cni to /opt/cni/bin
+  become: yes
+  become_user: root
+  file:
+    src: "{{ item.path }}"
+    dest: "/opt/cni/bin/{{ item.path | basename }}"
+    state: link
+  with_items: "{{ path_files.files }}"
+
+  

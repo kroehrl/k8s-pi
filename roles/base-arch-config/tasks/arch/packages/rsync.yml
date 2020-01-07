@@ -1,0 +1,7 @@
+---
+- name: Install rsync
+  become: yes
+  become_user: root
+  pacman:
+    name: rsync
+    state: present

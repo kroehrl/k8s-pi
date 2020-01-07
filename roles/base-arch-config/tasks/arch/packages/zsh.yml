@@ -1,0 +1,25 @@
+- name: Install ZSH
+  become: yes
+  become_user: root
+  pacman:
+    name:
+      - zsh
+      - zsh-completions
+    state: present
+
+- name: Install prezto-git dependencies
+  become: yes
+  become_user: root
+  pacman:
+    name:
+      - fakeroot
+      - coreutils
+      - git
+      - sed
+    state: present
+
+- name: Install prezto
+  become: yes
+  become_user: aur_builder
+  aur:
+    name: prezto-git

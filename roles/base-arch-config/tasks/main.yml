@@ -1,0 +1,14 @@
+---
+- include: arch/pacman.yml
+- include: arch/packages/main.yml
+
+- name: Reboot to activate changes
+  become: yes
+  become_user: root
+  reboot:
+
+- name: Wait until hosts rebooted
+  become: yes
+  become_user: root
+  wait_for_connection:  
+    timeout: 120

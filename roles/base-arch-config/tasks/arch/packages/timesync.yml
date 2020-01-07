@@ -1,0 +1,8 @@
+---
+- name: Enable systemd-timesyncd
+  become: yes
+  become_user: root
+  service:
+    name: systemd-timesyncd.service
+    enabled: yes 
+    state: started
