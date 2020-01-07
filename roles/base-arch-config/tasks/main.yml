@@ -1,6 +1,36 @@
 ---
-- include: arch/pacman.yml
-- include: arch/packages/main.yml
+- name: upgrade all packages
+  become: yes
+  become_user: root
+  pacman:
+    update_cache: yes
+    upgrade: yes
+
+# Install base packages
+- include: packages/yay.yml
+- include: packages/bash.yml
+- include: packages/zsh.yml
+# - include: packages/acpid.yml
+- include: packages/htop.yml
+- include: packages/dbus.yml
+- include: packages/avahi.yml
+# - include: packages/cups.yml
+# - include: packages/cronie.yml
+- include: packages/timesync.yml
+# - include: packages/rsync.yml
+# - include: packages/ethtool.yml
+# - include: packages/socat.yml
+- include: packages/docker.yml
+- include: packages/kubernetes-binaries.yml
+- include: packages/cni-plugins.yml
+
+- name: enable colorful output in pacman.conf
+  become: yes
+  become_user: root
+  replace:
+    path: /etc/pacman.conf
+    regexp: '^#\s*Color.*$'
+    replace: 'Color'
 
 - name: Reboot to activate changes
   become: yes

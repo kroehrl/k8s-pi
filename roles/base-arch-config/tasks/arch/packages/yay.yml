@@ -36,7 +36,7 @@
       name: go
       state: present
 
-- name: Install yay
+- name: install yay
   become: yes
   become_user: aur_builder
   aur:
