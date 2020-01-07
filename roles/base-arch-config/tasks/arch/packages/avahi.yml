@@ -1,12 +1,12 @@
 ---
-- name: Install avahi
+- name: install avahi
   become: yes
   become_user: root
   pacman:
     name: avahi
     state: present
 
-- name: Enable avahi
+- name: enable avahi
   become: yes
   become_user: root
   service:

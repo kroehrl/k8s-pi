@@ -1,4 +1,4 @@
-- name: Install ZSH
+- name: install ZSH
   become: yes
   become_user: root
   pacman:
@@ -7,7 +7,7 @@
       - zsh-completions
     state: present
 
-- name: Install prezto-git dependencies
+- name: install prezto-git dependencies
   become: yes
   become_user: root
   pacman:
@@ -18,7 +18,7 @@
       - sed
     state: present
 
-- name: Install prezto
+- name: install prezto
   become: yes
   become_user: aur_builder
   aur:

@@ -12,7 +12,7 @@
     - kubelet
     - kubectl
 
-- name: Download kubelet.service
+- name: download kubelet.service
   become: yes
   become_user: root
   get_url:
@@ -28,7 +28,7 @@
     path: /etc/systemd/system/kubelet.service.d
     state: directory
 
-- name: Download 10-kubeadm.conf
+- name: download 10-kubeadm.conf
   become: yes
   become_user: root
   get_url:
@@ -37,7 +37,7 @@
     mode: '0644'
     force: yes
 
-- name: Enable kubelet
+- name: enable kubelet
   become: yes
   become_user: root
   service:

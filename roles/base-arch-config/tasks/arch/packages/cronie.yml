@@ -1,12 +1,12 @@
 ---
-- name: Install cronie
+- name: install cronie
   become: yes
   become_user: root
   pacman:
     name: cronie
     state: present
 
-- name: Enable cronie
+- name: enable cronie
   become: yes
   become_user: root
   service:

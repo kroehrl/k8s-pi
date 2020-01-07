@@ -1,5 +1,5 @@
 ---
-- name: Install rsync
+- name: install rsync
   become: yes
   become_user: root
   pacman:

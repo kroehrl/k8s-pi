@@ -1,12 +1,12 @@
 ---
-- name: Create aur_builder
+- name: create aur_builder
   become: yes
   become_user: root
   user:
     name: aur_builder
     group: wheel
 
-- name: Setup sudoers file for aur_builder
+- name: setup sudoers file for aur_builder
   become: yes
   become_user: root
   lineinfile:
@@ -15,21 +15,21 @@
     create: yes
     validate: 'visudo -cf %s'
 
-- name: Install base-devel
+- name: install base-devel
   become: yes
   become_user: root
   pacman:
       name: base-devel
       state: present
 
-- name: Install git
+- name: install git
   become: yes
   become_user: root
   pacman:
       name: git
       state: present
 
-- name: Install go
+- name: install go
   become: yes
   become_user: root
   pacman:

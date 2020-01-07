@@ -1,12 +1,12 @@
 ---
-- name: Install docker
+- name: install docker
   become: yes
   become_user: root
   pacman:
     name: docker
     state: present
 
-- name: Enable docker
+- name: enable docker
   become: yes
   become_user: root
   service:
@@ -15,7 +15,7 @@
     state: started
   ignore_errors: yes # This task may fail. But after the later reboot the service should be up and running.
 
-- name: Add user to docker group
+- name: add user to docker group
   become: yes
   become_user: root
   user: 

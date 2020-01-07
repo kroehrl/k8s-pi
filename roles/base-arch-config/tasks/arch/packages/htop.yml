@@ -1,5 +1,5 @@
 ---
-- name: Install htop
+- name: install htop
   become: yes
   become_user: root
   pacman:

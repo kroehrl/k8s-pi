@@ -1,5 +1,5 @@
 ---
-- name: Enable systemd-timesyncd
+- name: enable systemd-timesyncd
   become: yes
   become_user: root
   service:

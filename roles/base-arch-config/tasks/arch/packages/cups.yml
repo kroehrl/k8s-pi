@@ -1,12 +1,12 @@
 ---
-- name: Install cups
+- name: install cups
   become: yes
   become_user: root
   pacman:
     name: cups
     state: present
 
-- name: Enable cups
+- name: enable cups
   become: yes
   become_user: root
   service:
