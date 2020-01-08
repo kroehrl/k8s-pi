@@ -90,8 +90,13 @@ You have to replace the ```<username>``` and ```<ip-address>``` placeholders.
 Repeat this step for all your RaspberryPis. You should now be able to login to your RaspberryPis by ssh without a password.
 
 
-## Install Ansible
+## Setup k8s
+
+### Install Ansible
 You can install ansible by following the [official ansible installation guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-the-control-node)
+
+
+### Create the configuration files
 
 
 ### TODO:
