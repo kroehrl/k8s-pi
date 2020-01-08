@@ -2,24 +2,26 @@
   become: yes
   become_user: root
   pacman:
-    name:
-      - zsh
-      - zsh-completions
+    name: zsh
     state: present
 
-- name: install prezto-git dependencies
-  become: yes
-  become_user: root
-  pacman:
-    name:
-      - fakeroot
-      - coreutils
-      - git
-      - sed
-    state: present
-
-- name: install prezto
+- name: install antigen
   become: yes
   become_user: aur_builder
   aur:
-    name: prezto-git
+    name: antigen-git
+
+- name: copy .zshrc
+  template:
+    src: zshrc.j2
+    dest: /home/{{ ansible_ssh_user }}/.zshrc
+
+- name: copy .antigenrc
+  template:
+    src: antigenrc.j2
+    dest: /home/{{ ansible_ssh_user }}/.antigenrc
+
+- name: set ZSH as shell
+  user:
+    name: {{ ansible_ssh_user }}
+    shell: /bin/bash

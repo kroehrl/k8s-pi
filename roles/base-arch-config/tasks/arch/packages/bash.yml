@@ -7,3 +7,8 @@
       - bash
       - bash-completion
     state: present
+
+- name: set BASH as user shell
+  user:
+    name: {{ ansible_ssh_user }}
+    shell: /bin/bash
