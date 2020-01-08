@@ -105,3 +105,9 @@ Adapt the file to your needs. Escpecially you have to change the hostnames and t
 
 - **Rename or copy the `secrets.yml.template` as `secrets.yml` in the secrets folder.** <br>
 TODO...
+
+### Bootstrap the cluster
+If everything is configured you should be able to bootstrap the cluster by executing the following command:
+```bash
+ansible-playbook -i inventory/hosts.ini --extra-vars @secrets/secrets.yml bootstrap.yml -K
+```
