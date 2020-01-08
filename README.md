@@ -97,9 +97,11 @@ You can install ansible by following the [official ansible installation guide](h
 
 
 ### Create the configuration files
+- **Rename or copy the `ansible.cfg.sample` as `ansible.cfg` in the project root.** <br>
+Adapt the file to your needs. The user for whom you have set up the passwordless SSH login should be entered as ```remote_user```.
 
+- **Rename or copy the `hosts.ini.sample` as `hosts.ini` in the inventory folder.** <br>
+Adapt the file to your needs. Escpecially you have to change the hostnames and the IP-Addresses. Furthermore if you use more/less nodes you have to add/remove hosts.
 
-### TODO:
-- [ ] Describe the manjaro minimal setup
-- [ ] Describe the ansible setup (f. e. by using pip and the requirements.txt)
-- [ ] Edit the ansible.cfg especially for the remote_user
+- **Rename or copy the `secrets.yml.template` as `secrets.yml` in the secrets folder.** <br>
+TODO...
