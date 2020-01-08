@@ -16,9 +16,14 @@ You can use [Etcher](https://www.balena.io/etcher/) to flash the image to the SD
 
 
 Access the Raspberry Pis by using ssh:
-```
+```bash
 ssh root@<ip-address>
 ```
+---
+**NOTE**
+You have to replace the ```<ip-address>``` placeholder.
+
+---
 
 A setup dialog will start where you have to configure the following items:
 - keyboard layout
@@ -34,14 +39,55 @@ A setup dialog will start where you have to configure the following items:
 
 After you are done configuring your Manjara ARM your Raspberry Pi will reboot.
 After that you can login by using your **username** instead of **root**:
-```
+```bash
 ssh <username>@<ip-address>
 ```
+---
+**NOTE**
+You have to replace the ```<username>``` and ```<ip-address>``` placeholders.
 
+---
 
+## Setting up public key authentication
 
+Based on [this](https://www.ssh.com/ssh/copy-id/) description we will setup a public key authentification. This makes it easier to access the RaspberryPis by using Ansible without the need of a password to login.
 
+### Create an public and private key file:
+```bash
+~ ❯ ssh-keygen              
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/white/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /home/white/.ssh/id_rsa.
+Your public key has been saved in /home/white/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:73mJv0tQer6JDlPq6Xw4kl4RBkF/tlaZ1ts6WmxNk+U white@white-Laptop
+The key's randomart image is:
++---[RSA 3072]----+
+|     .+.         |
+|       o     +   |
+|        + o * . .|
+|       . + *   +o|
+|        S * . .oE|
+|         * + . +.|
+|       .=...o.* .|
+|      o+o=o+o* . |
+|     ..o=+=oBo   |
++----[SHA256]-----+
+```
 
+### Copy the SSH key to the RaspberryPi
+```bash
+ssh-copy-id -i ${HOME}/.ssh/id_rsa <username>@<ip-address>
+```
+---
+**NOTE**
+You have to replace the ```<username>``` and ```<ip-address>``` placeholders.
+
+---
+
+Repeat this step for all your RaspberryPis. You should than be able to login to your RaspberryPis by ssh without a password.
 
 
 
