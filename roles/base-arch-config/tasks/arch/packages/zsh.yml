@@ -22,6 +22,8 @@
     dest: /home/{{ ansible_ssh_user }}/.antigenrc
 
 - name: set ZSH as shell
+  become: yes
+  become_user: root
   user:
     name: "{{ ansible_ssh_user }}"
     shell: /bin/zsh

@@ -9,6 +9,8 @@
     state: present
 
 - name: set BASH as user shell
+  become: yes
+  become_user: root
   user:
     name: "{{ ansible_ssh_user }}"
     shell: /bin/bash
