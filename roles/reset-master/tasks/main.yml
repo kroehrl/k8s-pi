@@ -1,0 +1,33 @@
+---
+- name: reset master
+  become: yes
+  become_user: root
+  shell: kubeadm reset -f
+
+- name: init k8s
+  become: yes
+  become_user: root
+  shell: kubeadm init --kubernetes-version {{ k8s_version }}
+
+- name: create config directory
+  file:
+    path: "{{ansible_env.HOME}}/.kube/"
+    state: directory
+    owner: "{{ansible_env.USER}}"
+    group: "users"
+    mode: 0755
+
+- name: copy admin.conf
+  become: yes
+  become_user: root
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ansible_env.HOME}}/.kube/config"
+    owner: "{{ansible_env.USER}}"
+    group: "users"
+    mode: 0755
+    remote_src: yes
+
+- name: allow workload on master node
+  shell: >
+    kubectl taint nodes --all node-role.kubernetes.io/master-

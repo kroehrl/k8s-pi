@@ -4,24 +4,34 @@
   roles:
     - base-arch-config
 
-# - hosts: kube-master
-#   any_errors_fatal: true
-#   roles:
-#     - reset-master
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - kubernetes-binaries
 
-# - hosts: kube-master
-#   any_errors_fatal: true
-#   roles:
-#     - download-kube-config
+- hosts: kube-master
+  any_errors_fatal: true
+  roles:
+    - reset-master
 
-# - hosts: all
-#   any_errors_fatal: true
-#   roles:
-#     - upload-kube-config
+- hosts: kube-master
+  any_errors_fatal: true
+  roles:
+    - cni-plugins
 
-# - hosts: kube-node
-#   any_errors_fatal: true
-#   roles:
-#     - reset-worker
+- hosts: kube-master
+  any_errors_fatal: true
+  roles:
+    - download-kube-config
+
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - upload-kube-config
+
+- hosts: kube-node
+  any_errors_fatal: true
+  roles:
+    - reset-worker
 
 # - import_playbook: upgrade.yml

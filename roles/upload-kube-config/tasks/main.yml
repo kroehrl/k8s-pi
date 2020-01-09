@@ -1,0 +1,13 @@
+
+- name: create config directory # should already exist from previous steps...
+  file:
+    path: "{{ansible_env.HOME}}/.kube/"
+    state: directory
+    owner: "{{ansible_env.USER}}"
+    group: "users"
+    mode: 0755
+
+- name: copy kube config from secrets
+  copy:
+    src: "{{ lookup('env', 'PWD') }}/secrets/admin.conf"
+    dest: "{{ansible_env.HOME}}/.kube/config"

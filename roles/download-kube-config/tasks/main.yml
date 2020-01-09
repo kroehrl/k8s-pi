@@ -1,0 +1,13 @@
+# required by synchronize module
+- name: install rsync
+  become: yes
+  become_user: root
+  pacman:
+    name: rsync
+    state: latest
+
+- name: download kubectl to tmp/
+  synchronize:
+    mode: pull
+    src: "{{ansible_env.HOME}}/.kube/config"
+    dest: "{{ lookup('env', 'PWD') }}/secrets/admin.conf"

@@ -1,0 +1,3 @@
+---
+- include: cni-plugins.yml
+- include: weave-net.yml
