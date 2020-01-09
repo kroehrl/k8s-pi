@@ -22,8 +22,9 @@
 # - include: arch/packages/cronie.yml
 - include: arch/packages/timesync.yml
 # - include: arch/packages/rsync.yml
-# - include: arch/packages/ethtool.yml
-# - include: arch/packages/socat.yml
+- include: arch/packages/ethtool.yml
+- include: arch/packages/socat.yml
+- include: arch/packages/ebtables.yml
 - include: arch/packages/docker.yml
 
 - name: enable colorful output in pacman.conf
