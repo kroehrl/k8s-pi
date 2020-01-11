@@ -111,3 +111,9 @@ If everything is configured you should be able to bootstrap the cluster by execu
 ```bash
 ansible-playbook -i inventory/hosts.ini --extra-vars @secrets/secrets.yml bootstrap.yml -K
 ```
+
+### Upgrade the cluster
+If you want to upgrade your cluster you just have to execute the following command. This will also trigger the `deploy.yml` playbook.
+```bash
+ansible-playbook -i inventory/hosts.ini --extra-vars @secrets/secrets.yml upgrade.yml -K
+```
