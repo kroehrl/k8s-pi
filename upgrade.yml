@@ -28,4 +28,9 @@
   roles:
     - weave-net
 
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - reboot
+
 - import_playbook: deploy.yml
