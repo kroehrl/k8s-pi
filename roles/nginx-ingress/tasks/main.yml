@@ -6,7 +6,7 @@
 
 - name: template nginx-ingress patch file
   template:
-    src: ./nginx-image-patch.yml
+    src: nginx-image-patch.yml
     dest: /tmp/
     owner: "{{ansible_env.USER}}"
     group: "{{ansible_env.USER}}"
@@ -20,7 +20,7 @@
 
 - name: template nginx-ingress service
   template:
-    src: ./nginx-ingress-service.yml
+    src: nginx-ingress-service.yml
     dest: /tmp/
     owner: "{{ansible_env.USER}}"
     group: "{{ansible_env.USER}}"
