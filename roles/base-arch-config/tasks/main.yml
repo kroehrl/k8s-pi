@@ -34,17 +34,3 @@
     path: /etc/pacman.conf
     regexp: '^#\s*Color.*$'
     replace: 'Color'
-
-- name: Reboot to activate changes
-  become: yes
-  become_user: root
-  reboot:
-
-- name: Wait until hosts rebooted
-  become: yes
-  become_user: root
-  wait_for_connection:  
-    timeout: 120
-
-- pause:
-    seconds: 20

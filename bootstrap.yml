@@ -7,7 +7,17 @@
 - hosts: all
   any_errors_fatal: true
   roles:
+    - cni-plugins
+
+- hosts: all
+  any_errors_fatal: true
+  roles:
     - kubernetes-binaries
+
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - reboot
 
 - hosts: kube-master
   any_errors_fatal: true
@@ -17,7 +27,7 @@
 - hosts: kube-master
   any_errors_fatal: true
   roles:
-    - cni-plugins
+    - weave-net
 
 - hosts: kube-master
   any_errors_fatal: true
