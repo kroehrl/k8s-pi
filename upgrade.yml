@@ -1,8 +1,8 @@
 ---
-#- hosts: all
-#  any_errors_fatal: true
-#  roles:
-#    - common
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - arch-upgrade
 
 - hosts: kube-master
   any_errors_fatal: true
