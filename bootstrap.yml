@@ -44,4 +44,4 @@
   roles:
     - reset-worker
 
-# - import_playbook: upgrade.yml
+- import_playbook: upgrade.yml

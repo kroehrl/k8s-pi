@@ -4,6 +4,16 @@
   roles:
     - arch-upgrade
 
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - cni-plugins
+
+- hosts: all
+  any_errors_fatal: true
+  roles:
+    - kubernetes-binaries
+
 - hosts: kube-master
   any_errors_fatal: true
   roles:
@@ -12,5 +22,10 @@
 - hosts: kube-node
   roles:
     - upgrade-worker
+
+- hosts: kube-master
+  any_errors_fatal: true
+  roles:
+    - weave-net
 
 - import_playbook: deploy.yml
