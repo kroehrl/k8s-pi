@@ -1,10 +1,6 @@
 # k8s-pi
-Kubernetes Cluster on Manjaro (ARM64)
-
-## Table of contents:
-- [Manjaro](#manjaro)
-- [TODO](#todo)
-
+Kubernetes Cluster on Manjaro (ARM64) (for the RaspberryPi4)<br>
+_Originally based on the scripts of [Lyle Franklin's k8s-pi](https://github.com/ljfranklin/k8s-pi)_
 
 ## Install Manjaro
 First of all you have to download the Manjaro ARM Image. In this case I used the Minimal Manjaro Arm Image for the Raspberry Pi 4 (I have tested this guide with version 19.12 of Manjaro ARM):
