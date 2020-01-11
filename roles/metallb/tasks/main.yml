@@ -6,15 +6,6 @@
     owner: "{{ansible_env.USER}}"
     group: "{{ansible_env.USER}}"
 
-#- name: create metallb-system namespace
-#  shell: >
-#    kubectl create namespace metallb-system
-
-#- name: install metallb
-#  shell: >
-#    helm install metallb 
-#    --namespace=metallb-system stable/metallb
-
 - name: install metallb
   shell: >
     kubectl 
