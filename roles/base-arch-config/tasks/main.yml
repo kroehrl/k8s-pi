@@ -7,25 +7,25 @@
     upgrade: yes
 
 # Install base packages
-- include: arch/packages/yay.yml
-- include: arch/packages/bash.yml
+- include: packages/yay.yml
+- include: packages/bash.yml
   when: shell == 'bash'
 
-- include: arch/packages/zsh.yml
+- include: packages/zsh.yml
   when: shell == 'zsh'
 
-# - include: arch/packages/acpid.yml
-- include: arch/packages/htop.yml
-- include: arch/packages/dbus.yml
-- include: arch/packages/avahi.yml
-# - include: arch/packages/cups.yml
-# - include: arch/packages/cronie.yml
-- include: arch/packages/timesync.yml
-# - include: arch/packages/rsync.yml
-- include: arch/packages/ethtool.yml
-- include: arch/packages/socat.yml
-- include: arch/packages/ebtables.yml
-- include: arch/packages/docker.yml
+# - include: packages/acpid.yml
+- include: packages/htop.yml
+- include: packages/dbus.yml
+- include: packages/avahi.yml
+# - include: packages/cups.yml
+# - include: packages/cronie.yml
+- include: packages/timesync.yml
+# - include: packages/rsync.yml
+- include: packages/ethtool.yml
+- include: packages/socat.yml
+- include: packages/ebtables.yml
+- include: packages/docker.yml
 
 - name: enable colorful output in pacman.conf
   become: yes
