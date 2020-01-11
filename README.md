@@ -104,7 +104,7 @@ Adapt the file to your needs. The user for whom you have set up the passwordless
 Adapt the file to your needs. Escpecially you have to change the hostnames and the IP-Addresses. Furthermore if you use more/less nodes you have to add/remove hosts.
 
 - **Rename or copy the `secrets.yml.template` as `secrets.yml` in the secrets folder.** <br>
-TODO...
+Adapt the file to your needs. This file contains also the versions of your deployments which will be used to upgrade your cluster.
 
 ### Bootstrap the cluster
 If everything is configured you should be able to bootstrap the cluster by executing the following command:
