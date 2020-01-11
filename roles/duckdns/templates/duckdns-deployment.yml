@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: duckdns
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: duckdns-token
+  namespace: duckdns
+type: Opaque
+stringData:
+  token: {{ duckdns_token }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: duckdns
+  namespace: duckdns
+  labels:
+    app: duckdns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duckdns
+  template:
+    metadata:
+      labels:
+        app: duckdns
+    spec:
+      containers:
+      - name: duckdns
+        image: linuxserver/duckdns:latest
+        imagePullPolicy: Always
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: Europe/Berlin
+        - name: SUBDOMAINS
+          value: {{ duckdns_subdomains }}
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: duckdns-token
+              key: token

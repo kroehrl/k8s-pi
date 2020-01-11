@@ -1,0 +1,26 @@
+---
+- name: template metallb config
+  template:
+    src: ./metallb-values.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+#- name: create metallb-system namespace
+#  shell: >
+#    kubectl create namespace metallb-system
+
+#- name: install metallb
+#  shell: >
+#    helm install metallb 
+#    --namespace=metallb-system stable/metallb
+
+- name: install metallb
+  shell: >
+    kubectl 
+    apply -f https://raw.githubusercontent.com/google/metallb/{{ metallb_version }}/manifests/metallb.yaml
+
+- name: config metallb
+  shell: >
+    kubectl 
+    apply -f /tmp/metallb-values.yml

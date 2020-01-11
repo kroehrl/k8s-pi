@@ -1,0 +1,12 @@
+---
+- name: template duckdns-deployment
+  template:
+    src: ./duckdns-deployment.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: create duckdns-deployment
+  shell: >
+    kubectl 
+    apply -f /tmp/duckdns-deployment.yml

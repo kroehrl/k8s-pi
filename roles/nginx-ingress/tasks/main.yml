@@ -1,0 +1,31 @@
+---
+- name: install nginx-ingress
+  shell: >
+    kubectl 
+    apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+
+- name: template nginx-ingress image-url patch file
+  template:
+    src: ./nginx-image-patch.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: patch nginx-ingress-controller deployment
+  shell: >
+    kubectl 
+    -n ingress-nginx
+    patch deployment nginx-ingress-controller 
+    --patch "$(cat /tmp/nginx-image-patch.yml)"
+
+- name: template nginx-ingress service
+  template:
+    src: ./nginx-ingress-service.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: create nginx-ingress service
+  shell: >
+    kubectl 
+    apply -f /tmp/nginx-ingress-service.yml

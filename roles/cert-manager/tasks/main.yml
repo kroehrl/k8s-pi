@@ -1,0 +1,19 @@
+---
+- name: template letsencrypt-staging config
+  template:
+    src: ./letsencrypt-staging.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: template letsencrypt-prod config
+  template:
+    src: ./letsencrypt-prod.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: install cert-manager
+  shell: >
+    kubectl apply 
+    -f https://github.com/jetstack/cert-manager/releases/download/{{ cert_manager_version }}/cert-manager.yaml

@@ -1,48 +1,24 @@
 ---
-- hosts: all
-  any_errors_fatal: true
-  roles:
-    - glusterfs-client
+# - hosts: all
+#   any_errors_fatal: true
+#   roles:
+#     - glusterfs-client
 
-- hosts: gfs-cluster
-  any_errors_fatal: true
-  roles:
-    # - k8s-module
-    - glusterfs-server
+# - hosts: gfs-cluster
+#   any_errors_fatal: true
+#   roles:
+#     - glusterfs-server
 
 - hosts: kube-master
   any_errors_fatal: true
   roles:
-    # - k8s-module
     - helm
     #- ark
     - metallb
     - nginx-ingress
+    - cert-manager
+    - duckdns
     #- dashboard
     #- openvpn
     #- unifi
     #- port-forwarding
-
-
-
-#apiVersion: extensions/v1beta1
-#kind: Ingress
-#metadata:
-#  name: kubernetes-dashboard
-#  annotations:
-#    kubernetes.io/ingress.class: "nginx"
-#    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-#  namespace: kubernetes-dashboard
-#spec:
-#  tls:
-#  - hosts:
-#    - roehrl.duckdns.org
-#    secretName: kubernetes-dashboard-tls-cert
-#  rules:
-#  - host: roehrl.duckdns.org
-#    http:
-#      paths:
-#      - path: /
-#        backend:
-#          serviceName: kubernetes-dashboard
-#          servicePort: web

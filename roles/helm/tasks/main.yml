@@ -1,0 +1,10 @@
+---
+- name: install helm
+  become: yes
+  become_user: aur_builder
+  aur:
+    name: kubernetes-helm
+
+- name: initialize helm chart repository
+  command: >
+    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
