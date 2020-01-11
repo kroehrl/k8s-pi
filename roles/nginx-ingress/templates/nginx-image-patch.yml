@@ -4,4 +4,4 @@ spec:
     spec:
       containers:
       - name: nginx-ingress-controller
-        image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64:{{ nginx-ingress-controller_image_version }}
+        image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64:{{ nginx-ingress-controller_version }}

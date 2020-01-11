@@ -4,7 +4,7 @@
     kubectl 
     apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
 
-- name: template nginx-ingress image-url patch file
+- name: template nginx-ingress patch file
   template:
     src: ./nginx-image-patch.yml
     dest: /tmp/
