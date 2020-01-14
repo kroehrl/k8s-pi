@@ -1,6 +1,15 @@
 ---
-- name: upgrade all packages
+- name: upgrade all packages from official repositories
+  become: yes
+  become_user: root
+  pacman:
+    update_cache: yes
+    upgrade: yes
+
+- name: upgrade all packages from aur
   become: yes
   become_user: aur_builder
   aur:
-    name: yay
+    use: yay
+    upgrade: yes
+    aur_only: yes
