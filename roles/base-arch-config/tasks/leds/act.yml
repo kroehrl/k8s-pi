@@ -1,9 +1,11 @@
 ---
 - name: disable ACT (green) LED
-  lineinfile:
-    dest: /boot/config.txt
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { regexp: '^dtparam=act_led_trigger', line: 'dtparam=act_led_trigger=none' }
-    - { regexp: '^dtparam=act_led_activelow', line: 'dtparam=act_led_activelow=off' }
+  become: yes
+  become_user: root
+  blockinfile:
+    path: /boot/config.txt
+    block: |
+
+      # Disable the ACT LED.
+      dtparam=act_led_trigger=none
+      dtparam=act_led_activelow=off

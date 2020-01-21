@@ -44,7 +44,7 @@
     replace: 'Color'
 
 - include: leds/act.yml
-  when: act_led_disabled == 'true'
+  when: act_led_disabled
 
 - include: leds/pwr.yml
-  when: pwr_led_disabled == 'true'
+  when: pwr_led_disabled
