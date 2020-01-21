@@ -1,9 +1,11 @@
 ---
 - name: disable PWR (red) LED
-  lineinfile:
-    dest: /boot/config.txt
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - { regexp: '^dtparam=pwr_led_trigger', line: 'dtparam=pwr_led_trigger=none' }
-    - { regexp: '^dtparam=pwr_led_activelow', line: 'dtparam=pwr_led_activelow=off' }
+  become: yes
+  become_user: root
+  blockinfile:
+    path: /boot/config.txt
+    block: |
+
+      # Disable the PWR LED.
+      dtparam=pwr_led_trigger=none
+      dtparam=pwr_led_activelow=off
