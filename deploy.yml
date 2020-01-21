@@ -1,14 +1,4 @@
 ---
-# - hosts: all
-#   any_errors_fatal: true
-#   roles:
-#     - glusterfs-client
-
-# - hosts: gfs-cluster
-#   any_errors_fatal: true
-#   roles:
-#     - glusterfs-server
-
 - hosts: kube-master
   any_errors_fatal: true
   roles:
@@ -22,3 +12,8 @@
     #- openvpn
     #- unifi
     #- port-forwarding
+
+- hosts: rook-cluster
+  any_errors_fatal: true
+  roles:
+    - rook

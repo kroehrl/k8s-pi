@@ -1,0 +1,99 @@
+---
+- name: pull rook
+  git:
+    repo: https://github.com/rook/rook.git
+    dest: /tmp/rook
+    version: "{{ rook_release}}"
+    force: yes
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*name: ROOK_CSI_CEPH_IMAGE.*)'
+    replace: '\1'
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*quay.io/cephcsi/cephcsi.*)'
+    replace: '  value: "{{ rook_csi_ceph_image }}"'
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*name: ROOK_CSI_REGISTRAR_IMAGE.*)'
+    replace: '\1'
+  
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*quay.io/k8scsi/csi-node-driver-registrar.*)'
+    replace: '  value: "{{ rook_csi_registrar_image }}"'
+  
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*name: ROOK_CSI_PROVISIONER_IMAGE.*)'
+    replace: '\1'
+  
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*quay.io/k8scsi/csi-provisioner.*)'
+    replace: '  value: "{{ rook_csi_provisioner_image }}"'
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*name: ROOK_CSI_SNAPSHOTTER_IMAGE.*)'
+    replace: '\1'
+  
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*quay.io/k8scsi/csi-snapshotter.*)'
+    replace: '  value: "{{ rook_csi_snapshotter_image }}"'
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*name: ROOK_CSI_ATTACHER_IMAGE.*)'
+    replace: '\1'
+  
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*quay.io/k8scsi/csi-attacher.*)'
+    replace: '  value: "{{ rook_csi_attacher_image }}"'
+
+# # Temporary workarounds:
+# - replace:
+#     path: /tmp/rook/cluster/examples/kubernetes/ceph/csi/template/rbd/csi-rbdplugin.yaml
+#     regexp: '(.*containerized=false.*)'
+#     replace: '# \1'
+
+# # Temporary workarounds (remove in csi-attacher)
+# - replace:
+#     path: /tmp/rook/cluster/examples/kubernetes/ceph/csi/template/cephfs/csi-cephfsplugin-provisioner-dep.yaml
+#     regexp: '(.*leader-election-type=leases.*)'
+#     replace: '# \1'
+#     after: 'name: csi-attacher'
+#     before: 'name: csi-provisioner'
+
+# # Temporary workarounds (remove in csi-rbdplugin-attacher)
+# - replace:
+#     path: /tmp/rook/cluster/examples/kubernetes/ceph/csi/template/rbd/csi-rbdplugin-provisioner-dep.yaml
+#     regexp: '(.*leader-election-type=leases.*)'
+#     replace: '# \1'
+#     after: 'name: csi-rbdplugin-attacher'
+#     before: 'name: csi-snapshotter'
+
+- name: install rook (common.yaml)
+  shell: >
+    kubectl 
+    apply -f /tmp/rook/cluster/examples/kubernetes/ceph/common.yaml
+
+- name: install rook (operator.yaml)
+  shell: >
+    kubectl 
+    apply -f /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+
+- name: install rook (cluster.yaml)
+  shell: >
+    kubectl 
+    apply -f /tmp/rook/cluster/examples/kubernetes/ceph/cluster.yaml
+ 
+- name: create block storageclass
+  shell: >
+    kubectl 
+    apply -f /tmp/rook/cluster/examples/kubernetes/ceph/csi/rbd/storageclass.yaml
