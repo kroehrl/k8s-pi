@@ -34,3 +34,17 @@
     path: /etc/pacman.conf
     regexp: '^#\s*Color.*$'
     replace: 'Color'
+
+- name: disable 
+  become: yes
+  become_user: root
+  replace:
+    path: /etc/pacman.conf
+    regexp: '^#\s*Color.*$'
+    replace: 'Color'
+
+- include: leds/act.yml
+  when: act_led_disabled == 'true'
+
+- include: leds/pwr.yml
+  when: pwr_led_disabled == 'true'
