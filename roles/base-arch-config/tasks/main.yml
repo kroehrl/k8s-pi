@@ -26,6 +26,7 @@
 - include: packages/socat.yml
 - include: packages/ebtables.yml
 - include: packages/docker.yml
+- include: packages/lvm.yml
 
 - name: enable colorful output in pacman.conf
   become: yes

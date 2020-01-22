@@ -1,0 +1,8 @@
+---
+# Needed for rook to remount the drives after a cluster reboot
+- name: install lvm
+  become: yes
+  become_user: root
+  pacman:
+    name: lvm2
+    state: present

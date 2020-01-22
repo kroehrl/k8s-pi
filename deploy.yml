@@ -12,8 +12,5 @@
     #- openvpn
     #- unifi
     #- port-forwarding
-
-- hosts: rook-cluster
-  any_errors_fatal: true
-  roles:
     - rook
+    

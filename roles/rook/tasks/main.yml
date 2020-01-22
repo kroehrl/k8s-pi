@@ -56,28 +56,6 @@
     regexp: '#(.*quay.io/k8scsi/csi-attacher.*)'
     replace: '  value: "{{ rook_csi_attacher_image }}"'
 
-# # Temporary workarounds:
-# - replace:
-#     path: /tmp/rook/cluster/examples/kubernetes/ceph/csi/template/rbd/csi-rbdplugin.yaml
-#     regexp: '(.*containerized=false.*)'
-#     replace: '# \1'
-
-# # Temporary workarounds (remove in csi-attacher)
-# - replace:
-#     path: /tmp/rook/cluster/examples/kubernetes/ceph/csi/template/cephfs/csi-cephfsplugin-provisioner-dep.yaml
-#     regexp: '(.*leader-election-type=leases.*)'
-#     replace: '# \1'
-#     after: 'name: csi-attacher'
-#     before: 'name: csi-provisioner'
-
-# # Temporary workarounds (remove in csi-rbdplugin-attacher)
-# - replace:
-#     path: /tmp/rook/cluster/examples/kubernetes/ceph/csi/template/rbd/csi-rbdplugin-provisioner-dep.yaml
-#     regexp: '(.*leader-election-type=leases.*)'
-#     replace: '# \1'
-#     after: 'name: csi-rbdplugin-attacher'
-#     before: 'name: csi-snapshotter'
-
 - name: install rook (common.yaml)
   shell: >
     kubectl 
