@@ -122,3 +122,8 @@ Get token:
 ```bash
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
+
+### (Optional) Pihole
+TODO!
+
+Template values.yml in roles/pihole/templates/values.yml

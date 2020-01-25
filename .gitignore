@@ -6,3 +6,4 @@
 *.retry
 /inventory/hosts.ini
 /ansible.cfg
+/roles/pihole/templates/values.yml

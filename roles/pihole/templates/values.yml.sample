@@ -1,0 +1,23 @@
+# Furhter configuration can be found at 
+# https://github.com/MoJo2600/pihole-kubernetes/blob/master/charts/pihole/values.yaml
+
+persistentVolumeClaim:
+  enabled: true
+  storageClass: rook-ceph-block
+
+serviceTCP:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.178.200
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+
+serviceUDP:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.178.200
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+
+DNS1: "9.9.9.9"
+DNS2: "149.112.112.112"
+
+adminPassword: "admin"

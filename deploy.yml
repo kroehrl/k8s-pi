@@ -2,12 +2,13 @@
 - hosts: kube-master
   any_errors_fatal: true
   roles:
-    #- helm
-    ##- ark
-    #- metallb
-    #- nginx-ingress
-    #- cert-manager
-    #- duckdns
+    - helm
+    #- ark
+    - metallb
+    - nginx-ingress
+    - cert-manager
+    - duckdns
     - dashboard
     - rook
+    - pihole
     

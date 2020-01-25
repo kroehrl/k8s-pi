@@ -1,0 +1,27 @@
+---
+- name: add pihole repo to helm
+  shell: >
+    helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/
+
+- name: update helm repo
+  shell: >
+    helm repo update
+
+- name: create pihole namespace
+  shell: >
+    kubectl 
+    create namespace pihole --dry-run -o yaml |
+    kubectl
+    apply -f -
+    
+- name: template pihole values.yml
+  template:
+    src: ./values.yml
+    dest: /tmp/pihole-values.yml
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: upgrade pihole (install if not exist)
+  shell: >
+    helm upgrade --install 
+    -f /tmp/pihole-values.yml pihole mojo2600/pihole -n pihole
