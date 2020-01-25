@@ -1,0 +1,15 @@
+# Furhter configuration can be found at 
+# https://github.com/helm/charts/blob/master/stable/prometheus/values.yaml
+
+alertmanager:
+  persistentVolume:
+    storageClass: rook-ceph-block
+
+server:
+  persistentVolume:
+    storageClass: rook-ceph-block
+
+kubeStateMetrics:
+  image:
+    # Currently there is no official ARM64 Image on quay.io/coreos/kube-state-metrics
+    repository: rascal/kube-state-metrics

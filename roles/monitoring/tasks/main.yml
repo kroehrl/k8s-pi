@@ -1,0 +1,35 @@
+---
+- name: update helm repo
+  shell: >
+    helm repo update
+
+- name: create monitoring namespace
+  shell: >
+    kubectl 
+    create namespace monitoring --dry-run -o yaml |
+    kubectl
+    apply -f -
+    
+- name: template prometheus values.yml
+  template:
+    src: ./prom-values.yml
+    dest: /tmp/prom-values.yml
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: upgrade prometheus (install if not exist)
+  shell: >
+    helm upgrade --install 
+    -f /tmp/prom-values.yml prometheus stable/prometheus -n monitoring
+
+- name: template grafana values.yml
+  template:
+    src: ./grafana-values.yml
+    dest: /tmp/grafana-values.yml
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: upgrade grafana (install if not exist)
+  shell: >
+    helm upgrade --install 
+    -f /tmp/grafana-values.yml grafana stable/grafana -n monitoring

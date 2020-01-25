@@ -1,0 +1,34 @@
+# Furhter configuration can be found at 
+# https://github.com/helm/charts/blob/master/stable/grafana/values.yaml
+
+persistence:
+  enabled: true
+  storageClassName: rook-ceph-block
+
+ingress:
+  enabled: {{ enable_grafana_ingress }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  path: /{{ grafana_subpath }}(/|$)(.*)
+  hosts:
+    - {{ duckdns_subdomains }}.duckdns.org
+  tls:
+    - secretName: grafana-tls
+      hosts:
+        - {{ duckdns_subdomains }}.duckdns.org
+
+grafana.ini:
+  server:
+    root_url: "%(protocol)s://%(domain)s:%(http_port)s/{{ grafana_subpath }}/"
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
