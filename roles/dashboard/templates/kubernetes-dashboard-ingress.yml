@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: rook-ceph-mgr-dashboard
-  namespace: rook-ceph
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
   annotations:
     kubernetes.io/ingress.class: "nginx"
     kubernetes.io/tls-acme: "true"
@@ -10,21 +10,20 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      proxy_ssl_verify off;
     # adds 301 redirect with trailing slash
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      rewrite ^(/{{ rook_ceph_dashboard_subpath }})$ $1/ permanent;
+      rewrite ^(/{{ kubernetes_dashboard_subpath }})$ $1/ permanent;
+
 spec:
   tls:
   - hosts:
     - {{ duckdns_subdomains }}.duckdns.org
-    secretName: ceph-dashboard-tls
+    secretName: kubernetes-dashboard-tls
   rules:
   - host: {{ duckdns_subdomains }}.duckdns.org
     http:
       paths:
-      - path: /{{ rook_ceph_dashboard_subpath }}(/|$)(.*)
+      - path: /{{ kubernetes_dashboard_subpath }}(/|$)(.*)
         backend:
-          serviceName: rook-ceph-mgr-dashboard
-          servicePort: 8443
+          serviceName: kubernetes-dashboard
+          servicePort: 443

@@ -113,3 +113,12 @@ If you want to upgrade your cluster you just have to execute the following comma
 ```bash
 ansible-playbook -i inventory/hosts.ini --extra-vars @secrets/secrets.yml upgrade.yml -K
 ```
+### Rook Dashboard
+TODO!
+
+### Kubernetes Dashboard
+TODO!
+Get token:
+```bash
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+```

@@ -1,0 +1,31 @@
+---
+- name: install kubernetes dashboard
+  shell: >
+    kubectl apply 
+    -f https://raw.githubusercontent.com/kubernetes/dashboard/{{ kubernetes_dashboard_version }}/aio/deploy/recommended.yaml
+
+- name: template admin config
+  template:
+    src: ./admin-user.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: create admin service account
+  shell: >
+    kubectl apply
+    -f /tmp/admin-user.yml
+
+- name: template kubernetes dashboard ingress
+  template:
+    src: ./kubernetes-dashboard-ingress.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+  when: enable_kubernetes_dashboard_ingress
+
+- name: install kubernetes dashboard ingress
+  shell: >
+    kubectl apply 
+    -f /tmp/kubernetes-dashboard-ingress.yml
+  when: enable_kubernetes_dashboard_ingress

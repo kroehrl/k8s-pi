@@ -82,11 +82,10 @@
     dest: /tmp/
     owner: "{{ansible_env.USER}}"
     group: "{{ansible_env.USER}}"
-  when: enable_rook_ingress_dashboard
-
+  when: enable_rook_dashboard_ingress
 
 - name: install ceph dashboard ingress
   shell: >
     kubectl apply 
     -f /tmp/rook-ceph-dashboard-ingress.yml
-  when: enable_rook_ingress_dashboard
+  when: enable_rook_dashboard_ingress
