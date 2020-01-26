@@ -76,6 +76,11 @@
     kubectl 
     apply -f /tmp/rook/cluster/examples/kubernetes/ceph/csi/rbd/storageclass.yaml
 
+- name: make rook-ceph-block storageClass the default
+  shell: >
+    kubectl 
+    patch storageclass rook-ceph-block -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
 - name: template ceph dashboard ingress
   template:
     src: ./rook-ceph-dashboard-ingress.yml
