@@ -29,15 +29,3 @@
   shell: >
     kubectl 
     apply -f /tmp/nginx-ingress-service.yml
-
-- name: create dummy ingress (for central domain certificate)
-  template:
-    src: dummy-ingress.yml
-    dest: /tmp/
-    owner: "{{ansible_env.USER}}"
-    group: "{{ansible_env.USER}}"
-
-- name: install dummy ingress (for central domain certificate)
-  shell: >
-    kubectl 
-    apply -f /tmp/dummy-ingress.yml
