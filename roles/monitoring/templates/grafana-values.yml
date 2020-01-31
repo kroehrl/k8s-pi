@@ -9,15 +9,16 @@ ingress:
   enabled: {{ enable_grafana_ingress }}
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   path: /{{ grafana_subpath }}(/|$)(.*)
   hosts:
     - {{ duckdns_subdomains }}.duckdns.org
   tls:
-    - secretName: grafana-tls
-      hosts:
+    - hosts:
         - {{ duckdns_subdomains }}.duckdns.org
+      # secretName: grafana-tls # using DummyIngress in ingress-nginx to get certificate
 
 grafana.ini:
   server:

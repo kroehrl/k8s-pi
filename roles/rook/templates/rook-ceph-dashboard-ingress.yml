@@ -6,7 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
@@ -19,7 +19,7 @@ spec:
   tls:
   - hosts:
     - {{ duckdns_subdomains }}.duckdns.org
-    secretName: ceph-dashboard-tls
+    # secretName: ceph-dashboard-tls # using DummyIngress in ingress-nginx to get certificate
   rules:
   - host: {{ duckdns_subdomains }}.duckdns.org
     http:
