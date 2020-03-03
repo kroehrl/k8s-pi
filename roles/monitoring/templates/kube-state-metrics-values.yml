@@ -1,0 +1,6 @@
+# Furhter configuration can be found at 
+# https://github.com/helm/charts/tree/master/stable/kube-state-metrics/values.yml
+
+image:
+  # Currently there is no official ARM64 Image on quay.io/coreos/kube-state-metrics
+  repository: rascal/kube-state-metrics

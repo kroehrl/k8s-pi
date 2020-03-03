@@ -10,6 +10,7 @@ server:
     storageClass: rook-ceph-block
 
 kubeStateMetrics:
+  enabled: false #will be directly installed by the subchart
   image:
     # Currently there is no official ARM64 Image on quay.io/coreos/kube-state-metrics
     repository: rascal/kube-state-metrics

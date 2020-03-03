@@ -22,6 +22,18 @@
     helm upgrade --install 
     -f /tmp/prom-values.yml prometheus stable/prometheus -n monitoring
 
+- name: template kube-state-metrics values.yml
+  template:
+    src: ./kube-state-metrics-values.yml
+    dest: /tmp/kube-state-metrics-values.yml
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: upgrade kube-state-metrics (install if not exist)
+  shell: >
+    helm upgrade --install 
+    -f /tmp/kube-state-metrics-values.yml kube-state-metrics stable/kube-state-metrics -n monitoring
+
 - name: template grafana values.yml
   template:
     src: ./grafana-values.yml
@@ -33,3 +45,5 @@
   shell: >
     helm upgrade --install 
     -f /tmp/grafana-values.yml grafana stable/grafana -n monitoring
+
+# get the token: kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
