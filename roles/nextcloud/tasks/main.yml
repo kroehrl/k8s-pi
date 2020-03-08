@@ -1,0 +1,75 @@
+---
+- name: update helm repo
+  shell: >
+    helm repo update
+
+- name: create nextcloud namespace
+  shell: >
+    kubectl 
+    create namespace nextcloud --dry-run -o yaml |
+    kubectl
+    apply -f -
+    
+- name: template postgresql values.yml
+  template:
+    src: ./postgresql-values.yml
+    dest: /tmp/postgresql-values.yml
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: upgrade postgresql (install if not exist)
+  shell: >
+    helm upgrade --install 
+    -f /tmp/postgresql-values.yml nextcloud-postgresql stable/postgresql -n nextcloud
+
+- name: template redis
+  template:
+    src: ./redis.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: create redis
+  shell: >
+    kubectl 
+    apply -f /tmp/redis.yml
+
+- name: template nextcloud
+  template:
+    src: ./nextcloud.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: create nextcloud
+  shell: >
+    kubectl 
+    apply -f /tmp/nextcloud.yml
+
+- name: wait until nextcloud pod is ready (can take a few minutes ;) 
+  shell: >
+    kubectl wait --for=condition=ready pod --selector=app=nextcloud --timeout=60s -n nextcloud
+  retries: 15
+  delay: 1
+  register: result
+  until: result.rc == 0
+
+- name: Add missing indices
+  shell: >
+    kubectl exec -n nextcloud -it $(kubectl get pods -n nextcloud | grep -m1 nextcloud|awk '{ print $1 }') -- /bin/bash -c "/sbin/runuser --user www-data /var/www/html/occ db:add-missing-indices"
+
+- name: Convert to bigint
+  shell: >
+    kubectl exec -n nextcloud -it $(kubectl get pods -n nextcloud | grep -m1 nextcloud|awk '{ print $1 }') -- /bin/bash -c "yes | /sbin/runuser --user www-data /var/www/html/occ db:convert-filecache-bigint"
+
+- name: template cronjob
+  template:
+    src: ./cronjob.yml
+    dest: /tmp/
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: create cronjob
+  shell: >
+    kubectl 
+    apply -f /tmp/cronjob.yml

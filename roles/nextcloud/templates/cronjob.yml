@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nextcloud
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: nextcloud-cronjob
+  namespace: nextcloud
+  labels:
+    app: nextcloud
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 5
+  successfulJobsHistoryLimit: 2
+  jobTemplate:
+    metadata:
+      labels:
+        app: cronjob
+    spec:
+      template:
+        metadata:
+          labels:
+            app: cronjob
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: cronjob
+              image: {{ cronjob_curl_image }}
+              imagePullPolicy: IfNotPresent
+              command: [ "curl" ]
+              args:
+                - "--fail"
+                - "-L"
+                - "https://{{ duckdns_subdomains }}.duckdns.org/cron.php"
+              resources:
+                {}

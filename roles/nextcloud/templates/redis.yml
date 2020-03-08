@@ -1,0 +1,204 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nextcloud
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nextcloud-redis
+  namespace: nextcloud
+  labels:
+    app: redis
+data:
+  #master.conf: |-
+    #dir /data
+    #rename-command FLUSHDB ""
+    #rename-command FLUSHALL ""
+  redis.conf: |-
+    bind 0.0.0.0
+    rename-command FLUSHDB ""
+    rename-command FLUSHALL ""
+    dir /data
+    # User-supplied configuration:
+    # Enable AOF https://redis.io/topics/persistence#append-only-file
+    appendonly yes
+    # Disable RDB persistence, AOF persistence already enabled.
+    save ""
+  #replica.conf: |-
+    #dir /data
+    #slave-read-only yes
+    #rename-command FLUSHDB ""
+    #rename-command FLUSHALL ""
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nextcloud-redis-health
+  namespace: nextcloud
+  labels:
+    app: redis
+data:
+  ping_liveness_local.sh: |-
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$response" != "PONG" ] && [ "$response" != "LOADING Redis is loading the dataset in memory" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_liveness_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_liveness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+  ping_liveness_master.sh: |-
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_MASTER_PORT_NUMBER \
+        ping
+    )
+    if [ "$response" != "PONG" ] && [ "$response" != "LOADING Redis is loading the dataset in memory" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_readiness_local.sh: |-
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h localhost \
+        -p $REDIS_PORT \
+        ping
+    )
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+  ping_readiness_local_and_master.sh: |-
+    script_dir="$(dirname "$0")"
+    exit_status=0
+    "$script_dir/ping_readiness_local.sh" $1 || exit_status=$?
+    "$script_dir/ping_readiness_master.sh" $1 || exit_status=$?
+    exit $exit_status
+  ping_readiness_master.sh: |-
+    response=$(
+      timeout -s 9 $1 \
+      redis-cli \
+        -h $REDIS_MASTER_HOST \
+        -p $REDIS_MASTER_PORT_NUMBER \
+        ping
+    )
+    if [ "$response" != "PONG" ]; then
+      echo "$response"
+      exit 1
+    fi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nextcloud-redis
+  namespace: nextcloud
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  serviceName: nextcloud-redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: {{ redis_image }}
+        imagePullPolicy: Always
+        command:
+          - redis-server
+          - "/usr/local/etc/redis/redis.conf"
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /health/ping_liveness_local.sh 5
+          failureThreshold: 5
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /health/ping_readiness_local.sh 5
+          failureThreshold: 5
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: REDIS_PORT
+          value: "6379"
+        ports:
+        - containerPort: 6379
+          name: redis
+          protocol: TCP
+        volumeMounts:
+        - name: health
+          mountPath: /health
+        - name: config
+          mountPath: /usr/local/etc/redis
+        - name: redis-data
+          mountPath: /data
+          subPath:
+      restartPolicy: Always
+      volumes:
+      - name: health
+        configMap:
+          defaultMode: 0755
+          name: nextcloud-redis-health
+      - name: config
+        configMap:
+          name: nextcloud-redis
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+        labels:
+          app: redis
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+        storageClassName: rook-ceph-block
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-redis
+  namespace: nextcloud
+  labels:
+    app: redis
+spec:
+  ports:
+    - name: redis
+      port: 6379
+      protocol: TCP
+      targetPort: redis
+  selector:
+    app: redis

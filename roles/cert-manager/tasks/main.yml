@@ -22,8 +22,16 @@
   shell: >
     kubectl apply 
     -f /tmp/letsencrypt-staging.yml
+  register: task_result
+  until: task_result.rc == 0
+  retries: 10
+  delay: 60
 
 - name: install letsencrypt-prod ClusterIssuer
   shell: >
     kubectl apply 
     -f /tmp/letsencrypt-prod.yml
+  retries: 10
+  delay: 60
+  register: task_result
+  until: task_result.rc == 0

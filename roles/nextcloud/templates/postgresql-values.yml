@@ -1,0 +1,29 @@
+# Furhter configuration can be found at 
+# https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+
+global:
+  postgresql:
+    postgresqlDatabase: {{ postgresql_database }}
+    postgresqlUsername: {{ postgresql_user }}
+    postgresqlPassword: {{ postgresql_password }}
+
+image:
+  repository: postgres
+  tag: {{ postgresql_image_tag }}
+
+persistence:
+  enabled: true
+  mountPath: /data
+  size: {{ postgresql_storage_size }}
+  storageClass: rook-ceph-block
+
+postgresqlDataDir: /data/pgdata
+
+volumePermissions:
+  image:
+    repository: alpine
+    tag: latest
+
+securityContext:
+  fsGroup: 70
+  runAsUser: 70
