@@ -15,3 +15,13 @@
   shell: >
     kubectl 
     apply -f /tmp/metallb-values.yml
+
+- name: create memberlist-secret (if not exists)
+  block:
+    - name: check for memberlist-secret
+      shell: >
+        kubectl
+        get secret memberlist -n metallb-system
+  rescue:
+    - name: create memberlist-secret
+      shell: openssl rand -base64 128 | kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey=-
