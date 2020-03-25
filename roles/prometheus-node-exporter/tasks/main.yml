@@ -1,0 +1,15 @@
+---
+- name: install prometheus-node-exporter
+  become: yes
+  become_user: root
+  pacman:
+    name: prometheus-node-exporter
+    state: present
+
+- name: enable prometheus-node-exporter
+  become: yes
+  become_user: root
+  service:
+    name: prometheus-node-exporter.service
+    enabled: yes 
+    state: started
