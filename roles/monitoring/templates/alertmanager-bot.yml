@@ -1,0 +1,115 @@
+#jinja2:variable_start_string:'[%', variable_end_string:'%]', trim_blocks: False
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-bot-message-template
+  namespace: monitoring
+data:
+  custom.tmpl: |-
+    {{ define "telegram.default" }}
+    {{ range .Alerts }}
+    {{ if eq .Status "firing"}}🔥 <b>{{ .Status | toUpper }}</b> 🔥{{else if eq .Status "resolved" }}💦 <b>{{ .Status | toUpper }}</b> 💦{{ else }}<b>{{ .Status | toUpper }}</b>{{ end }}
+    <b>{{ .Annotations.summary }}</b>
+    {{ .Annotations.description }}{{ end }}
+    <b>Duration:</b> {{ duration .StartsAt .EndsAt }}{{ if ne .Status "firing"}}
+    <b>Ended:</b> {{ .EndsAt | since }}{{ end }}
+    {{ end }}
+    {{ end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-bot-config
+  namespace: monitoring
+data:
+  ALERTMANAGER_URL: http://prometheus-alertmanager.monitoring.svc.cluster.local #Alertmanager's DNS. Using internal kubernetes here
+  BOLT_PATH: /data/chat.db
+  STORE: bolt
+  LISTEN_ADDR: 0.0.0.0:8080
+  TELEGRAM_ADMIN: "[% telegram_user_id %]" #It will fail to start with anything other than numbers. Put some random number then get your ID from interacting with the bot. It will log the ID as unauthorized
+  TEMPLATE_PATHS: /templates/custom.tmpl
+---
+apiVersion: v1
+stringData:
+  TELEGRAM_TOKEN: [% telegram_notifier_bottoken %]
+kind: Secret
+metadata:
+  labels:
+    app: alertmanager-bot
+  name: alertmanager-bot-secret
+  namespace: monitoring
+type: Opaque
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: data-alertmanager-bot
+  namespace: monitoring
+  labels:
+    app: alertmanager-bot
+spec:
+  storageClassName: rook-ceph-block
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertmanager-bot
+  namespace: monitoring
+  labels:
+    app: alertmanager-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alertmanager-bot
+  template:
+    metadata:
+      labels:
+        app: alertmanager-bot
+    spec:
+      containers:
+      - name: alertmanager-bot
+        image: [% alertmanager_bot_image %]
+        envFrom:
+        - secretRef:
+            name: alertmanager-bot-secret
+            optional: false
+        - configMapRef:
+            name: alertmanager-bot-config
+            optional: false
+        volumeMounts:
+        - name: alertmanager-bot-data
+          mountPath: /data
+          volumes:
+        - name: message-template
+          mountPath: /templates
+      volumes: 
+      - name: alertmanager-bot-data
+        persistentVolumeClaim:
+          claimName: data-alertmanager-bot
+      - name: message-template
+        configMap:
+          name: alertmanager-bot-message-template
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager-bot
+  namespace: monitoring
+  labels:
+    app: alertmanager-bot
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: alertmanager-bot

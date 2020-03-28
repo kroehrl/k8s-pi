@@ -1,6 +1,9 @@
 # Furhter configuration can be found at 
 # https://github.com/helm/charts/blob/master/stable/grafana/values.yaml
 
+adminUser: {{ grafana_admin_user }}
+adminPassword: {{ grafana_admin_password }}
+
 persistence:
   enabled: true
   storageClassName: rook-ceph-block
@@ -33,3 +36,54 @@ datasources:
       url: http://prometheus-server.monitoring.svc.cluster.local
       access: proxy
       isDefault: true
+
+dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      # - name: 'general'
+      #   orgId: 1
+      #   folder: 'General'
+      #   type: file
+      #   disableDeletion: true
+      #   editable: true
+      #   options:
+      #     path: /var/lib/grafana/dashboards/general
+      - name: 'ceph'
+        orgId: 1
+        folder: 'Ceph'
+        type: file
+        disableDeletion: true
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/ceph
+dashboards:
+  ceph:
+    ceph-cluster:
+      gnetId: 2842
+      datasource: Prometheus
+    ceph-osd:
+      gnetId: 5336
+      datasource: Prometheus
+    ceph-pools:
+      gnetId: 5342
+      datasource: Prometheus
+  default:
+    node-exporter:
+      gnetId: 11074
+      datasource: Prometheus
+
+notifiers:
+ notifiers.yaml:
+   notifiers:
+   - name: Telegram
+     type: telegram
+     uid: Telegram
+     is_default: true
+     settings:
+       bottoken: {{ telegram_notifier_bottoken }}
+       chatid: "{{ telegram_notifier_chatid }}"
+
+downloadDashboardsImage:
+  repository: {{ curl_image_repository }}
+  tag: {{ curl_image_tag }}
