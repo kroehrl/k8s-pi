@@ -18,6 +18,16 @@
 
 - replace:
     path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*name: ROOK_CSI_RESIZER_IMAGE.*)'
+    replace: '\1'
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*quay.io/k8scsi/csi-resizer.*)'
+    replace: '  value: "{{ rook_csi_resizer_image }}"'
+
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
     regexp: '#(.*name: ROOK_CSI_REGISTRAR_IMAGE.*)'
     replace: '\1'
   
