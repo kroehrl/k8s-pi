@@ -27,6 +27,7 @@
 - include: packages/ebtables.yml
 - include: packages/docker.yml
 - include: packages/lvm.yml
+- include: packages/systemd-resolved.yml
 
 - name: enable colorful output in pacman.conf
   become: yes
