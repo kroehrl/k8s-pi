@@ -1,4 +1,11 @@
 ---
+- name: create metallb-system namespace
+  shell: >
+    kubectl 
+    create namespace metallb-system --dry-run -o yaml |
+    kubectl
+    apply -f -
+
 - name: template metallb config
   template:
     src: ./metallb-values.yml
