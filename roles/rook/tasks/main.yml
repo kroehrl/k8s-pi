@@ -8,64 +8,34 @@
 
 - replace:
     path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*name: ROOK_CSI_CEPH_IMAGE.*)'
-    replace: '\1'
+    regexp: '#(.*ROOK_CSI_CEPH_IMAGE.*)'
+    replace: 'ROOK_CSI_CEPH_IMAGE: "{{ rook_csi_ceph_image }}"'
 
 - replace:
     path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*quay.io/cephcsi/cephcsi.*)'
-    replace: '  value: "{{ rook_csi_ceph_image }}"'
+    regexp: '#(.*ROOK_CSI_RESIZER_IMAGE.*)'
+    replace: 'ROOK_CSI_RESIZER_IMAGE: "{{ rook_csi_resizer_image }}"'
 
 - replace:
     path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*name: ROOK_CSI_RESIZER_IMAGE.*)'
-    replace: '\1'
+    regexp: '#(.*ROOK_CSI_REGISTRAR_IMAGE.*)'
+    replace: 'ROOK_CSI_REGISTRAR_IMAGE: "{{ rook_csi_registrar_image }}"'
+    
+- replace:
+    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
+    regexp: '#(.*ROOK_CSI_PROVISIONER_IMAGE.*)'
+    replace: 'ROOK_CSI_PROVISIONER_IMAGE: "{{ rook_csi_provisioner_image }}"'
 
 - replace:
     path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*quay.io/k8scsi/csi-resizer.*)'
-    replace: '  value: "{{ rook_csi_resizer_image }}"'
+    regexp: '#(.*ROOK_CSI_SNAPSHOTTER_IMAGE.*)'
+    replace: 'ROOK_CSI_SNAPSHOTTER_IMAGE: "{{ rook_csi_snapshotter_image }}"'
 
 - replace:
     path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*name: ROOK_CSI_REGISTRAR_IMAGE.*)'
-    replace: '\1'
+    regexp: '#(.*ROOK_CSI_ATTACHER_IMAGE.*)'
+    replace: 'ROOK_CSI_ATTACHER_IMAGE: "{{ rook_csi_attacher_image }}"'
   
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*quay.io/k8scsi/csi-node-driver-registrar.*)'
-    replace: '  value: "{{ rook_csi_registrar_image }}"'
-  
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*name: ROOK_CSI_PROVISIONER_IMAGE.*)'
-    replace: '\1'
-  
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*quay.io/k8scsi/csi-provisioner.*)'
-    replace: '  value: "{{ rook_csi_provisioner_image }}"'
-
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*name: ROOK_CSI_SNAPSHOTTER_IMAGE.*)'
-    replace: '\1'
-  
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*quay.io/k8scsi/csi-snapshotter.*)'
-    replace: '  value: "{{ rook_csi_snapshotter_image }}"'
-
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*name: ROOK_CSI_ATTACHER_IMAGE.*)'
-    replace: '\1'
-  
-- replace:
-    path: /tmp/rook/cluster/examples/kubernetes/ceph/operator.yaml
-    regexp: '#(.*quay.io/k8scsi/csi-attacher.*)'
-    replace: '  value: "{{ rook_csi_attacher_image }}"'
-
 - name: install rook (common.yaml)
   shell: >
     kubectl 
