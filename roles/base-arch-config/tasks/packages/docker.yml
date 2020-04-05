@@ -6,6 +6,28 @@
     name: docker
     state: present
 
+- name: add user to docker group
+  become: yes
+  become_user: root
+  user: 
+    name: "{{ ansible_ssh_user }}"
+    groups: docker
+    append: yes
+
+- name: Ensures /etc/docker/ dir exists
+  become: yes
+  become_user: root
+  file: 
+    path: /etc/docker/ 
+    state: directory
+
+- name: copy daemon.json
+  become: yes
+  become_user: root
+  template:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+
 - name: enable docker
   become: yes
   become_user: root
@@ -14,11 +36,3 @@
     enabled: yes 
     state: started
   ignore_errors: yes # This task may fail. But after the later reboot the service should be up and running.
-
-- name: add user to docker group
-  become: yes
-  become_user: root
-  user: 
-    name: "{{ ansible_ssh_user }}"
-    groups: docker
-    append: yes

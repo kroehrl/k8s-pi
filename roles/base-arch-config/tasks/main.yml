@@ -28,6 +28,7 @@
 - include: packages/docker.yml
 - include: packages/lvm.yml
 - include: packages/systemd-resolved.yml
+- include: packages/conntrack-tools.yml
 
 - name: enable colorful output in pacman.conf
   become: yes
