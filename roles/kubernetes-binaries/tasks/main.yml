@@ -12,14 +12,23 @@
     - kubelet
     - kubectl
 
-- name: download kubelet.service
+- name: copy kubelet.service to nodes
   become: yes
   become_user: root
-  get_url:
-    url: "https://raw.githubusercontent.com/kubernetes/kubernetes/{{ k8s_version }}/build/debs/kubelet.service"
+  copy:
+    src: kubelet.service
     dest: /etc/systemd/system/kubelet.service
     mode: '0644'
-    force: yes
+    
+
+# - name: download kubelet.service
+#   become: yes
+#   become_user: root
+#   get_url:
+#     url: "https://raw.githubusercontent.com/kubernetes/kubernetes/{{ k8s_version }}/build/debs/kubelet.service"
+#     dest: /etc/systemd/system/kubelet.service
+#     mode: '0644'  
+#     force: yes
 
 - name: create /etc/systemd/system/kubelet.service.d directory
   become: yes
@@ -28,14 +37,22 @@
     path: /etc/systemd/system/kubelet.service.d
     state: directory
 
-- name: download 10-kubeadm.conf
+# - name: download 10-kubeadm.conf
+#   become: yes
+#   become_user: root
+#   get_url:
+#     url: "https://raw.githubusercontent.com/kubernetes/kubernetes/{{ k8s_version }}/build/debs/10-kubeadm.conf"
+#     dest:  "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
+#     mode: '0644'
+#     force: yes
+
+- name: copy 10-kubeadm.conf to nodes
   become: yes
   become_user: root
-  get_url:
-    url: "https://raw.githubusercontent.com/kubernetes/kubernetes/{{ k8s_version }}/build/debs/10-kubeadm.conf"
-    dest:  "/etc/systemd/system/kubelet.service.d/10-kubeadm.conf"
+  copy:
+    src: 10-kubeadm.conf
+    dest: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
     mode: '0644'
-    force: yes
 
 - name: enable kubelet
   become: yes
