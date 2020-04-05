@@ -10,10 +10,8 @@
   become: yes
   become_user: root
   shell: >
-    kubeadm upgrade
-    node config
-    --kubelet-version "$(kubelet --version | cut -d ' ' -f 2)"
-
+    kubeadm upgrade node 
+    
 - name: restart kubelet
   become: yes
   become_user: root

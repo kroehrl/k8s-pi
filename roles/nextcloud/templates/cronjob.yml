@@ -12,7 +12,7 @@ metadata:
   labels:
     app: nextcloud
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/15 * * * *"
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 5
   successfulJobsHistoryLimit: 2
@@ -29,7 +29,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: cronjob
-              image: {{ cronjob_curl_image }}
+              image: {{ curl_image_repository }}:{{ curl_image_tag}}
               imagePullPolicy: IfNotPresent
               command: [ "curl" ]
               args:

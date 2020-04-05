@@ -41,14 +41,14 @@ dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-      # - name: 'general'
-      #   orgId: 1
-      #   folder: 'General'
-      #   type: file
-      #   disableDeletion: true
-      #   editable: true
-      #   options:
-      #     path: /var/lib/grafana/dashboards/general
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: true
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/general
       - name: 'ceph'
         orgId: 1
         folder: 'Ceph'
@@ -70,7 +70,7 @@ dashboards:
       datasource: Prometheus
   default:
     node-exporter:
-      gnetId: 11074
+      gnetId: 1860
       datasource: Prometheus
 
 notifiers:

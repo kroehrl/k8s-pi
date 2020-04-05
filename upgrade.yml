@@ -28,10 +28,10 @@
   roles:
     - weave-net
 
-- hosts: all
-  any_errors_fatal: true
-  roles:
-    - prometheus-node-exporter
+#- hosts: all
+#  any_errors_fatal: true
+#  roles:
+#    - prometheus-node-exporter
 
 - hosts: all
   any_errors_fatal: true
