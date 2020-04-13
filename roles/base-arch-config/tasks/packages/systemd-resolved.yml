@@ -14,9 +14,9 @@
     path: /etc/systemd/resolved.conf.d/ 
     state: directory
 
-- name: copy fallback_dns.conf
+- name: copy dns_servers.conf
   become: yes
   become_user: root
   template:
-    src: fallback_dns.conf
-    dest: /etc/systemd/resolved.conf.d/fallback_dns.conf
+    src: dns_servers.conf
+    dest: /etc/systemd/resolved.conf.d/dns_servers.conf
