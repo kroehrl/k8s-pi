@@ -51,3 +51,12 @@
 
 - include: leds/pwr.yml
   when: pwr_led_disabled
+
+- name: Enable cgroups_memory # needed for kubeadm
+  become: yes
+  become_user: root
+  lineinfile:
+    path: /boot/cmdline.txt
+    regexp: '(?=.*root)(?!.*cgroup_enable=memory)(.+)'
+    backrefs: yes
+    line: '\1 cgroup_enable=memory'
