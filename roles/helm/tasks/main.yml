@@ -2,8 +2,9 @@
 - name: install helm
   become: yes
   become_user: aur_builder
-  aur:
-    name: kubernetes-helm
+  pacman:
+    name: helm
+    state: present
 
 - name: initialize helm chart repository
   command: >
