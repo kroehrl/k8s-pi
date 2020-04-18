@@ -1,7 +1,7 @@
 ---
 - name: install helm
   become: yes
-  become_user: aur_builder
+  become_user: root
   pacman:
     name: helm
     state: present
