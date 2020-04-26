@@ -5,3 +5,7 @@
 
 image:
   repository: k8s.gcr.io/metrics-server-arm64
+
+args:
+  - --kubelet-insecure-tls
+  - --kubelet-preferred-address-types=InternalIP
