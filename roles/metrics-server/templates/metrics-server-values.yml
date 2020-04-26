@@ -1,0 +1,7 @@
+#jinja2:variable_start_string:'[%', variable_end_string:'%]', trim_blocks: False
+
+# Furhter configuration can be found at 
+# https://github.com/helm/charts/blob/master/stable/metrics-server/values.yaml
+
+image:
+  repository: k8s.gcr.io/metrics-server-arm64

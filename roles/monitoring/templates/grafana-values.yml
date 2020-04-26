@@ -43,22 +43,17 @@ dashboardProviders:
       providers:
       - name: 'default'
         orgId: 1
-        folder: ''
+        folder: 'Default'
         type: file
         disableDeletion: true
         editable: true
         options:
-          path: /var/lib/grafana/dashboards/general
-      - name: 'ceph'
-        orgId: 1
-        folder: 'Ceph'
-        type: file
-        disableDeletion: true
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/ceph
+          path: /var/lib/grafana/dashboards/default
 dashboards:
-  ceph:
+  default:
+    node-exporter:
+      gnetId: 1860
+      datasource: Prometheus
     ceph-cluster:
       gnetId: 2842
       datasource: Prometheus
@@ -67,10 +62,6 @@ dashboards:
       datasource: Prometheus
     ceph-pools:
       gnetId: 5342
-      datasource: Prometheus
-  default:
-    node-exporter:
-      gnetId: 1860
       datasource: Prometheus
 
 notifiers:

@@ -1,0 +1,16 @@
+---
+- name: update helm repo
+  shell: >
+    helm repo update
+   
+- name: template metrics-server values.yml
+  template:
+    src: ./metrics-server-values.yml
+    dest: /tmp/metrics-server-values.yml
+    owner: "{{ansible_env.USER}}"
+    group: "{{ansible_env.USER}}"
+
+- name: upgrade metrics-server (install if not exist)
+  shell: >
+    helm upgrade --install 
+    -f /tmp/metrics-server-values.yml metrics-server stable/metrics-server -n kube-system

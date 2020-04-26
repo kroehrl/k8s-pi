@@ -137,8 +137,8 @@ serverFiles:
 server:
   persistentVolume:
     storageClass: rook-ceph-block
-  service:
-    type: LoadBalancer
+  #service:
+  #  type: LoadBalancer
 
 kubeStateMetrics:
   enabled: false #will be directly installed by the subchart

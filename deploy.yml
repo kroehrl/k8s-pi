@@ -3,6 +3,7 @@
   any_errors_fatal: true
   roles:
     - helm
+    - metrics-server
     #- ark
     - metallb
     - nginx-ingress
