@@ -10,6 +10,9 @@ controller:
     minReplicas: 1
     maxReplicas: 3
 
+  metrics:
+    enabled: true
+
 defaultBackend:
   image:
     repository: k8s.gcr.io/defaultbackend-arm64
