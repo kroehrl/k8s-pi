@@ -1,9 +1,13 @@
 # Furhter configuration can be found at 
 # https://github.com/MoJo2600/pihole-kubernetes/blob/master/charts/pihole/values.yaml
 
+replicaCount: 2
+
 persistentVolumeClaim:
   enabled: true
-  storageClass: rook-ceph-block
+  accessModes:
+    - ReadWriteMany
+  storageClass: rook-cephfs
 
 serviceTCP:
   type: LoadBalancer
@@ -19,5 +23,8 @@ serviceUDP:
 
 DNS1: "9.9.9.9"
 DNS2: "149.112.112.112"
+
+doh:
+  enabled: true
 
 adminPassword: "admin"
