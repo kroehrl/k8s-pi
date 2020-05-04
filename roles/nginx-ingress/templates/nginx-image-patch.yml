@@ -1,7 +1,0 @@
----
-spec:
-  template:
-    spec:
-      containers:
-      - name: nginx-ingress-controller
-        image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64:{{ nginx_ingress_controller_version }}

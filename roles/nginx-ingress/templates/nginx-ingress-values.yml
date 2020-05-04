@@ -1,0 +1,15 @@
+# Furhter configuration can be found at 
+# https://github.com/helm/charts/blob/master/stable/nginx-ingress/values.yaml
+
+controller:
+  image:
+    repository: quay.io/kubernetes-ingress-controller/nginx-ingress-controller-arm64
+
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 3
+
+defaultBackend:
+  image:
+    repository: k8s.gcr.io/defaultbackend-arm64

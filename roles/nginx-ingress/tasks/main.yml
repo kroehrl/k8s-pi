@@ -1,31 +1,23 @@
 ---
-- name: install nginx-ingress
+- name: update helm repo
+  shell: >
+    helm repo update
+
+- name: create nginx-ingress namespace
   shell: >
     kubectl 
-    apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
-
-- name: template nginx-ingress patch file
+    create namespace nginx-ingress --dry-run -o yaml |
+    kubectl
+    apply -f -
+    
+- name: template nginx-ingress values.yml
   template:
-    src: nginx-image-patch.yml
-    dest: /tmp/
+    src: ./nginx-ingress-values.yml
+    dest: /tmp/nginx-ingress-values.yml
     owner: "{{ansible_env.USER}}"
     group: "{{ansible_env.USER}}"
 
-- name: patch nginx-ingress-controller deployment
+- name: upgrade nginx-ingress (install if not exist)
   shell: >
-    kubectl 
-    -n ingress-nginx
-    patch deployment nginx-ingress-controller 
-    --patch "$(cat /tmp/nginx-image-patch.yml)"
-
-- name: template nginx-ingress service
-  template:
-    src: nginx-ingress-service.yml
-    dest: /tmp/
-    owner: "{{ansible_env.USER}}"
-    group: "{{ansible_env.USER}}"
-
-- name: create nginx-ingress service
-  shell: >
-    kubectl 
-    apply -f /tmp/nginx-ingress-service.yml
+    helm upgrade --install 
+    -f /tmp/nginx-ingress-values.yml nginx-ingress stable/nginx-ingress -n nginx-ingress
