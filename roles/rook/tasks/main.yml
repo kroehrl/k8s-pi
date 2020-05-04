@@ -51,10 +51,20 @@
     kubectl 
     apply -f /tmp/rook/cluster/examples/kubernetes/ceph/cluster.yaml
  
-- name: create block storageclass
+- name: create rook-ceph-block storageclass
   shell: >
     kubectl 
     apply -f /tmp/rook/cluster/examples/kubernetes/ceph/csi/rbd/storageclass.yaml
+
+- name: create CephFilesystem
+  shell: >
+    kubectl 
+    apply -f /tmp/rook/cluster/examples/kubernetes/ceph/filesystem.yaml
+
+- name: create rook-cephfs storageclass
+  shell: >
+    kubectl 
+    apply -f /tmp/rook/cluster/examples/kubernetes/ceph/csi/cephfs/storageclass.yaml
 
 - name: make rook-ceph-block storageClass the default
   shell: >
